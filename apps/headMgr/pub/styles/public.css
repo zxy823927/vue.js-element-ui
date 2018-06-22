@@ -1,0 +1,24 @@
+/**
+*公共样式
+*/
+/**按钮 加i标签样式**/
+#app .el-button .iconfont{
+    padding-right: 5px;
+    font-size: 11px;
+}
+/**按钮 默认icon样式**/
+#app .button-default-icon .el-button .iconfont{
+    padding-right: 0px;
+}
+
+#app .el-step__head.is-text.is-process {
+    color: #fff;
+    background-color: #ff3300;
+    border-color: #ff3300;
+    -webkit-box-shadow: 0 0 10px 5px #ff6d6d;
+    -moz-box-shadow: 0 0 10px 5px #ff6d6d;
+    box-shadow: 0 0 10px 5px #ff6d6d;
+}
+#app .routercontent .el-form-item .el-form-item__content .el-textarea .el-textarea__inner{
+    font-family: "Microsoft Yahei";
+}

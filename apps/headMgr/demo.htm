@@ -1,0 +1,287 @@
+<html>
+<head>
+    
+    <title>CR500A demo</title>
+    <script type="text/javascript" language="javascript" >
+
+        function connect() {
+            var ret = reader.Connect(mainForm.selectComPort.value, mainForm.selectBaud.value);
+            addLog("Connect", reader.LastError, "Device NO:" + reader.DeviceID);
+
+            ulRead.style.display = reader.Connected == true? "block" : "none" ;
+            return false;
+        }
+
+        function disconnect() {
+            reader.Disconnect();
+            addLog("Disconnect", reader.LastError);
+
+            ulRead.style.display = "none";
+	    return false;
+        }
+
+        function search() {
+
+            if (!reader.Connected) {
+                alert("please connect first");
+                return;
+            }
+
+            var ret = reader.Request(0x52);
+            addLog("Request", reader.LastError, "Card Type£º"+ret);
+
+            var serial = reader.Anticollision(4);
+            mainForm.txtCardSerial.value = serial;
+            addLog("Anticollision", reader.LastError, "Card Serial£º" + serial);
+        }
+
+        function readCard() {
+            if (!reader.Connected) {
+                alert("Please connect first");
+                return;
+            }
+            if (mainForm.txtKey.value.length != 12) {
+                alert("Please input the key");
+            }
+
+            var ret = reader.Request(0x52);
+            addLog("Request", reader.LastError, "Card Type£º" + ret);
+
+            var serial = reader.Anticollision(4);
+            mainForm.txtCardSerial.value = serial;
+            addLog("Anticollision", reader.LastError, "Card Serial£º" + serial);
+
+            var cardRet = reader.Select(serial)
+            addLog("Select", reader.LastError, "Return£º" + cardRet);
+
+            var key = mainForm.txtKey.value;
+            var block = parseInt(mainForm.selectSector.value) * 4 + parseInt(mainForm.selectBlock.value);
+            reader.Authentication2(mainForm.rdoKeyA.checked ? 0x60 : 0x61, block, key);
+            addLog("Authentication2", reader.LastError, "Key:"+key);
+
+            var blockData = reader.Read(block);
+            mainForm.txtBlockData.value = blockData;
+            addLog("Read", reader.LastError, blockData);
+        }
+
+        function writeCard() {
+            if (!reader.Connected) {
+                alert("Please connect first");
+                return;
+            }
+            if (mainForm.txtKey.value.length != 12) {
+                alert("Please input the key");
+            }
+            if (mainForm.txtBlockData.value.length != 32) {
+                alert("Please input the content to write");
+            }
+
+            var ret = reader.Request(0x52);
+            addLog("Request", reader.LastError, "Card Type£º" + ret);
+
+            var serial = reader.Anticollision(4);
+            mainForm.txtCardSerial.value = serial;
+            addLog("Anticollision", reader.LastError, "Card Serial£º" + serial);
+
+            var cardRet = reader.Select(serial)
+            addLog("Select", reader.LastError, "Return£º" + cardRet);
+
+            var key = mainForm.txtKey.value;
+            var block = parseInt(mainForm.selectSector.value) * 4 + parseInt(mainForm.selectBlock.value);
+            reader.Authentication2(mainForm.rdoKeyA.checked ? 0x60 : 0x61, block, key);
+            addLog("Authentication2", reader.LastError, "Key:" + key);
+
+            var cardContent = mainForm.txtBlockData.value;
+            reader.Write(block, cardContent);
+            addLog("Write", reader.LastError, null);
+        }
+
+        function addLog(functionName, errorCode, data) {
+            var now = new Date();
+            var date = now.getYear() +"-" + now.getMonth() +"-"+ now.getDay();
+            var time = now.getHours() +":"+ now.getMinutes() +":"+now.getSeconds();
+
+            var li = "<li class='LogItem_" + (errorCode == 0 ? "OK'" : "Faild'")+">"+
+                date + " " + time + " Opeartion£º" + functionName + (errorCode == 0 ? " Success" : " Faild("+errorCode+")") + ",Data=" + data + "</li>";
+
+            document.getElementById("ulLog").innerHTML = li + document.getElementById("ulLog").innerHTML;
+         }
+
+         function clearLog() {
+             document.getElementById("ulLog").innerHTML = "";
+         }
+    </script>
+    <style type="text/css">
+        body
+        {
+            font-size:11pt;
+        }
+        #mainDiv
+        {
+            display:block;
+            width:680px;
+            margin:auto;        
+        }
+        ul{
+            margin:1;
+            padding: 4px 4px 4px 4px;
+        }
+        li
+        {
+           list-style:none;
+        }
+        .lines li
+        {
+            list-style:none;
+            text-indent:0;
+            padding:  8px 4px 8px 4px;
+            border-bottom: 1px gray dashed;
+            height: 30px;
+        }
+        .border, .textbox
+        {
+            height: 24px;
+            border: 1px solid #888888;
+            font-size:16px;
+            font-weight:bold;
+            padding:4 0 2 2;
+        }
+        .textbox
+        {
+            width:300px;
+        }
+        input[type="button"],
+        button
+        {
+            height: 24px;
+            border: 1px solid #888888;
+            font-size:13px;
+            padding:2 8 0 8;
+            margin:0 0 0 8px;
+        }
+        ul.ulLog li
+        {
+            padding: 2px 2px 2px 2px;
+            border-bottom: 0;
+        }
+        .LogItem_OK
+        {
+            color:blue;
+            border-bottom: 1px dashed #EFEFEF;
+            padding:2 2 2 2;
+        }
+        select
+        {
+            width:114px;
+        }
+        .LogItem_Faild
+        {
+            color:Red;
+            border-bottom: 1px dashed #EFEFEF;
+            padding:2 2 2 2;
+        }
+        fieldset
+        {
+            width:600px;
+        }
+
+    </style>
+</head>
+<body>
+    <object classid="clsid:695D6372-E585-4A69-A85A-4E14FB1C6F92" id="reader" name = "reader" codebase="./CR_ReaderX.cab"  ></object>
+    <form id="mainForm" action="demo_en.htm">
+    <div id="mainDiv">
+    <fieldset>
+    <legend>CR500 Reader Demo</legend>
+    <ul style="background:#CDCDCD; border:1px solid gray;">
+        <li>
+        	<table><tr><td>
+            &nbsp;&nbsp;&nbsp;Com Port£º
+            <select id="selectComPort" name="selectComPort" class="border">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+            </select>
+            <br />
+            <div style="margin-top:6px;">
+            &nbsp;&nbsp;Baud Rate£º
+            <select id="selectBaud" name="selectBaud" class="border">
+                <option value="1">9600</option>
+                <option value="2">14400</option>
+                <option value="3">19200</option>
+                <option value="4">28800</option>
+                <option value="5">38400</option>
+                <option value="6">57600</option>
+                <option value="7">115200</option>
+            </select> 
+          </div>
+          </td><td width="40%">
+            <button onclick="connect(); return false;">Connect</button>
+            <button onclick="disconnect(); return false;">Disconnect</button>
+          </td></tr></table>
+        </li>
+    </ul>
+    <ul id="ulRead" name="ulRead" class="lines" style="display:block;" >
+        <li>Card Serial£º 
+            <input id="txtCardSerial" name="txtCardSerial" type="text" class="textbox" />
+            <button onclick="search(); return false;">Search Card</button>
+        </li>
+        <li>            
+           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Sector£º 
+            <select id="selectSector" class="border">
+                <option value="0">0</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+                <option value="10">10</option>
+                <option value="11">11</option>
+                <option value="12">12</option>
+                <option value="13">13</option>
+                <option value="14">14</option>
+                <option value="15">15</option>
+            </select>
+            Block£º
+            <select id="selectBlock" class="border" >
+                <option value="0">0</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+            </select>
+        </li>
+        <li>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Key£º
+            <input id="txtKey" name="txtKey" type="text" maxlength="12" value="FFFFFFFFFFFF" class="textbox" />
+            <label for="rdoKeyA"><input id="rdoKeyA" type="radio" checked="checked"  />Key A</label>
+            <label for="rdoKeyB"><input id="rdoKeyB" type="radio" />Key B</label>
+        </li>
+        <li>
+            &nbsp;&nbsp;&nbsp;&nbsp;Content£º
+            <input id="txtBlockData" name="txtBlockData" maxlength="32" type="text" class="textbox" />
+            <button onclick="readCard(); return false;">Read</button>
+            <button onclick="writeCard(); return false;">Write</button>
+        </li>
+    </ul>
+
+    <ul>
+       <li style="padding-bottom:4px;">Log£º<button onclick="clearLog(); return false;">Clear</button></li> 
+
+        <li>
+        <div style="overflow:scroll; width:600px; height:300px; border:1px solid gray;">
+            <ul id="ulLog" >
+                
+            </ul>
+        </div>
+        </li>
+    </ul>
+</fieldset>
+</div>
+</form>
+</body>
+</html>

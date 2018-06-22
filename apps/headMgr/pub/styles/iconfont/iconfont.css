@@ -1,0 +1,109 @@
+
+@font-face {font-family: "iconfont";
+  src: url('iconfont.eot?t=1494038979317'); /* IE9*/
+  src: url('iconfont.eot?t=1494038979317#iefix') format('embedded-opentype'), /* IE6-IE8 */
+  url('iconfont.woff?t=1494038979317') format('woff'), /* chrome, firefox */
+  url('iconfont.ttf?t=1494038979317') format('truetype'), /* chrome, firefox, opera, Safari, Android, iOS 4.2+*/
+  url('iconfont.svg?t=1494038979317#iconfont') format('svg'); /* iOS 4.1- */
+}
+
+.iconfont {
+  font-family:"iconfont" !important;
+  font-size:16px;
+  font-style:normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-bianji:before { content: "\e604"; }
+
+.icon-shop:before { content: "\e600"; }
+
+.icon-delete:before { content: "\e61c"; }
+
+.icon-right-arrow:before { content: "\e613"; }
+
+.icon-jiahao:before { content: "\e69a"; }
+
+.icon-rolemgr:before { content: "\e721"; }
+
+.icon-disable:before { content: "\e617"; }
+
+.icon-organization:before { content: "\e735"; }
+
+.icon-setting:before { content: "\e61a"; }
+
+.icon-add:before { content: "\e67d"; }
+
+.icon-user:before { content: "\e601"; }
+
+.icon-updown:before { content: "\e62c"; }
+
+.icon-shanchu:before { content: "\e61b"; }
+
+.icon-defdoc:before { content: "\e651"; }
+
+.icon-discount01:before { content: "\e669"; }
+
+.icon-discount:before { content: "\e612"; }
+
+.icon-line-del:before { content: "\e6f5"; }
+
+.icon-enable:before { content: "\e789"; }
+
+.icon-shopgroup:before { content: "\e62e"; }
+
+.icon-exception:before { content: "\e608"; }
+
+.icon-arrow-down:before { content: "\e607"; }
+
+.icon-pay:before { content: "\e603"; }
+
+.icon-print1:before { content: "\e606"; }
+
+.icon-multi-language:before { content: "\e62f"; }
+
+.icon-attendance:before { content: "\e643"; }
+
+.icon-dishes:before { content: "\e627"; }
+
+.icon-reportmgr:before { content: "\e60e"; }
+
+.icon-distribution:before { content: "\e65e"; }
+
+.icon-index:before { content: "\e629"; }
+
+.icon-crm:before { content: "\e62b"; }
+
+.icon-view:before { content: "\e619"; }
+
+.icon-batch-edit:before { content: "\e649"; }
+
+.icon-dining-table:before { content: "\e615"; }
+
+.icon-export:before { content: "\e689"; }
+
+.icon-department:before { content: "\e63a"; }
+
+.icon-dashboard:before { content: "\e62d"; }
+
+.icon-demo:before { content: "\e602"; }
+
+.icon-limit-price:before { content: "\e60f"; }
+
+.icon-showenable:before { content: "\e764"; }
+
+.icon-showdisable:before { content: "\e6b5"; }
+
+.icon-print:before { content: "\e605"; }
+
+.icon-head:before { content: "\e635"; }
+
+.icon-positionmgr:before { content: "\e633"; }
+
+.icon-shiftmgr:before { content: "\e65c"; }
+
+.icon-left-arrow:before { content: "\e78a"; }
+
+.icon-arrow-up:before { content: "\e78b"; }
+
